@@ -60,10 +60,10 @@ JUDGMENT_STATE_REVISION_MAP = {
 }
 
 STATE_COLOR_MAP = {
-    PaperRevisionState.submitted: 'white',
-    PaperRevisionState.accepted: 'green',
-    PaperRevisionState.to_be_corrected: 'yellow',
-    PaperRevisionState.rejected: 'red'
+    PaperRevisionState.submitted: ('black', 'white'),
+    PaperRevisionState.accepted: ('white','green'),
+    PaperRevisionState.to_be_corrected: ('white', 'yellow'),
+    PaperRevisionState.rejected: ('white', 'red')
 }
 
 
@@ -313,8 +313,8 @@ class EventPaperReviewingImporter(LocalFileImporterMixin, EventMigrationStep):
                 review_colors += _review_color(review, 'L')
             contribution._paper_revisions.append(revision)
 
-            self.print_info('\tRevision %[blue!]{}%[reset] %[white,{}]  %[reset] {}'.format(
-                n, STATE_COLOR_MAP[state], review_colors))
+            self.print_info('\tRevision %[blue!]{}%[reset] %[{}, {}]  %[reset] {}'.format(
+                n, STATE_COLOR_MAP[state][0], STATE_COLOR_MAP[state][1], review_colors))
 
             last_file = self._migrate_paper_files(old_contrib, contribution, old_revision, revision, rm)
             submitted_dt = _to_utc(last_file.created_dt) if last_file else min(self.event.end_dt, strict_now_utc())
